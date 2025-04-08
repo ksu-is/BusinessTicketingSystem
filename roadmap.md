@@ -10,6 +10,7 @@
 - [x] Learn markdown language to: 
     - [x] Write README.md
     - [x] Create roadmap documentation
+    - [x] Apply License to project
 - [x] Download VMWare
 - [x] Download MYSQL Server
 - [x] Get virtual machine ready to host MYSQL server
