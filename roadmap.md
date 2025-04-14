@@ -21,11 +21,11 @@
 
 ## Sprint Week 2
 ### Tasks
-- [] Load existing database into MYSQL Server
+- [x] Load existing database into MYSQL Server
+- [x] Create webserver using django
 - [] Connect to MYSQL Server using python
-- [] Query and modify database to ensure data integrity
-- [] Create mock email for the ticketing system
-- [] Create website using Flask
+- [x] Query and modify database to ensure data integrity
+- [x] Create mock email for the ticketing system
 - [] Scrape Emails to add as "tickets"
 
 ### Week 2 Bugs
