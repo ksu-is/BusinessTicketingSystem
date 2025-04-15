@@ -26,15 +26,18 @@
 - [] Connect to MYSQL Server using python
 - [x] Query and modify database to ensure data integrity
 - [x] Create mock email for the ticketing system
-- [] Scrape Emails to add as "tickets"
+- [x] Scrape Emails to add as "tickets"
 
 ### Week 2 Bugs
-- 
+- Issues connecting remotely to database
 
 ## Sprint Week 3
 
 ### Tasks
-- []
+- [] Finish webserver to host frontend of ticketing system
+- [] Figure out how to load scraped emails into database where needed
+- [] Ensure connection to database through python
+- [] Finalize and polish all changes
 
 ### Week 3 Bugs
 - 
