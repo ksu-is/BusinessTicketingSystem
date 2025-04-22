@@ -1,0 +1,256 @@
+<!-- templates/tickets/ticket_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .app-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .app-header h1 {
+            margin-bottom: 10px;
+        }
+
+        .filters {
+            background-color: #ecf0f1;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filters input, .filters select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .filters button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .filters button:hover {
+            background-color: #2980b9;
+        }
+
+        .ticket-list {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ticket-list th {
+            background-color: #34495e;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: normal;
+            position: sticky;
+            top: 0;
+        }
+
+        .ticket-list tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .ticket-list td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-align: center;
+            width: 100px;
+        }
+
+        .status-open {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .status-in-progress {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .status-resolved {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .ticket-row:hover {
+            background-color: #eaf2f8;
+            cursor: pointer;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .pagination button.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters input, .filters select, .filters button {
+                margin-bottom: 10px;
+                width: 100%;
+                margin-right: 0;
+            }
+            
+            .ticket-list {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h1>Company Ticketing System</h1>
+            <p>Manage and track support requests</p>
+        </header>
+        
+        <div class="filters">
+            <form method="get" action="{% url 'ticket_list' %}">
+                <div>
+                    <input type="text" name="query" placeholder="Search tickets..." value="{{ request.GET.query }}">
+                    <select name="status">
+                        <option value="">All Statuses</option>
+                        <option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option>
+                        <option value="in-progress" {% if request.GET.status == 'in-progress' %}selected{% endif %}>In Progress</option>
+                        <option value="resolved" {% if request.GET.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                    </select>
+                    <button type="submit">Filter</button>
+                </div>
+            </form>
+            <a href="{% url 'ticket_create' %}"><button>Create New Ticket</button></a>
+        </div>
+        
+        <table class="ticket-list">
+            <thead>
+                <tr>
+                    <th>Ticket #</th>
+                    <th>Subject</th>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Branch</th>
+                    <th>Date Created</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr class="ticket-row">
+                    <td>{{ ticket.ticid }}</td>
+                    <td>{{ ticket.ticname }}</td>
+                    <td>{{ ticket.employid.employname }}</td>
+                    <td>{{ ticket.employid.deptname }}</td>
+                    <td>{{ ticket.employid.brnumb.brname }}</td>
+                    <td>{{ ticket.ticcreatedate|date:"Y-m-d H:i" }}</td>
+                    <td>{{ ticket.ticpriority }}</td>
+                    <td>
+                        <span class="status status-{{ ticket.status }}">
+                            {% if ticket.status == 'open' %}
+                                Open
+                            {% elif ticket.status == 'in-progress' %}
+                                In Progress
+                            {% else %}
+                                Resolved
+                            {% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 20px;">No tickets found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if tickets.has_other_pages %}
+        <div class="pagination">
+            {% if tickets.has_previous %}
+                <a href="?page={{ tickets.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                    <button>&laquo;</button>
+                </a>
+            {% endif %}
+            
+            {% for i in tickets.paginator.page_range %}
+                {% if tickets.number == i %}
+                    <button class="active">{{ i }}</button>
+                {% else %}
+                    <a href="?page={{ i }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                        <button>{{ i }}</button>
+                    </a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if tickets.has_next %}
+                <a href="?page={{ tickets.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                    <button>&raquo;</button>
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

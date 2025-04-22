@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'ticketingsystem\\templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,9 +78,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ticketingsystem',
         'USER': 'tsprayberry',
-       #removed for security 'PASSWORD': ',
-        #removed for security'HOST': '',
-        #removed for security'PORT': '
+       #Commented out for security 'PASSWORD': '',
+       #Commented out for security 'HOST': '',
+        'PORT': '3306',
+         'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
