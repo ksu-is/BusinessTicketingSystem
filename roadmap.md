@@ -23,7 +23,7 @@
 ### Tasks
 - [x] Load existing database into MYSQL Server
 - [x] Create webserver using django
-- [] Connect to MYSQL Server using python
+- [x] Connect to MYSQL Server using python
 - [x] Query and modify database to ensure data integrity
 - [x] Create mock email for the ticketing system
 - [x] Scrape Emails to add as "tickets"
@@ -36,7 +36,7 @@
 ### Tasks
 - [] Finish webserver to host frontend of ticketing system
 - [] Figure out how to load scraped emails into database where needed
-- [] Ensure connection to database through python
+- [x] Ensure connection to database through python
 - [] Finalize and polish all changes
 
 ### Week 3 Bugs
