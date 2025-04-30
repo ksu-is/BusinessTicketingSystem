@@ -12,3 +12,8 @@ class TicketForm(forms.ModelForm):
             'employid': 'Employee',
             'agentid': 'Assigned Agent',
         }
+
+class CloseTicketForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = []  # No fields needed, just closing the ticket

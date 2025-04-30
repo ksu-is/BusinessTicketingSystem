@@ -100,17 +100,17 @@
             width: 100px;
         }
 
-        .status-open {
+        .status-Open {
             background-color: #e74c3c;
             color: white;
         }
 
-        .status-in-progress {
+        .status-In-Progress {
             background-color: #f39c12;
             color: white;
         }
 
-        .status-resolved {
+        .status-Resolved {
             background-color: #2ecc71;
             color: white;
         }
@@ -173,9 +173,9 @@
                     <input type="text" name="query" placeholder="Search tickets..." value="{{ request.GET.query }}">
                     <select name="status">
                         <option value="">All Statuses</option>
-                        <option value="open" {% if request.GET.status == 'open' %}selected{% endif %}>Open</option>
-                        <option value="in-progress" {% if request.GET.status == 'in-progress' %}selected{% endif %}>In Progress</option>
-                        <option value="resolved" {% if request.GET.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                        <option value="Open" {% if request.GET.status == 'Open' %}selected{% endif %}>Open</option>
+                        <option value="In-Progress" {% if request.GET.status == 'In-Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Resolved" {% if request.GET.status == 'Resolved' %}selected{% endif %}>Resolved</option>
                     </select>
                     <button type="submit">Filter</button>
                 </div>
@@ -217,9 +217,9 @@
                     <td>{{ ticket.ticpriority }}</td>
                     <td>
                         <span class="status status-{{ ticket.status }}">
-                            {% if ticket.status == 'open' %}
+                            {% if ticket.status == 'Open' %}
                                 Open
-                            {% elif ticket.status == 'in-progress' %}
+                            {% elif ticket.status == 'In-Progress' %}
                                 In Progress
                             {% else %}
                                 Resolved

@@ -4,7 +4,8 @@ from django.db.models import Q
 from .models import Ticket, Employee, Branch, Comment, Ticketmetrics
 from django.http import HttpResponse
 from django.utils import timezone
-from .forms import TicketForm
+from django.utils.timezone import now
+from .forms import TicketForm, CloseTicketForm
 
 # Create your views here.
 
@@ -45,16 +46,42 @@ def ticket_list(request):
 def ticket_detail(request, ticid):
     ticket = get_object_or_404(Ticket, ticid=ticid)
     comments = Comment.objects.filter(ticid=ticket)
-    
-    try:
-        metrics = Ticketmetrics.objects.get(ticid=ticket)
-    except Ticketmetrics.DoesNotExist:
-        metrics = None
-    
+
+    metrics = None
+    if ticket.ticclosetime:
+        try:
+            metrics = Ticketmetrics.objects.get(ticid=ticket, ticclosetime=ticket.ticclosetime)
+        except Ticketmetrics.DoesNotExist:
+            metrics = None
+
+    # Check if the ticket is being closed
+    if request.method == 'POST':
+        form = CloseTicketForm(request.POST, instance=ticket)
+        if form.is_valid():
+            # Generate the close time
+            close_time = now()
+
+            # Create a Ticketmetrics entry with the concatenated primary keys
+            Ticketmetrics.objects.create(
+                ticclosetime=close_time,  # Use the generated close time
+                ticid=ticket,  # Use the ticket's ID
+                agentid=ticket.agentid,  # Assign the agent handling the ticket
+                satisfaction='N',  # Default satisfaction value
+            )
+
+            # Update the close time for the ticket
+            ticket.ticclosetime = close_time
+            ticket.save()
+
+            return redirect('ticket_detail', ticid=ticket.ticid)
+    else:
+        form = CloseTicketForm(instance=ticket)
+
     return render(request, 'tickets/ticket_detail.html', {
         'ticket': ticket,
         'comments': comments,
-        'metrics': metrics
+        'metrics': metrics,
+        'form': form,
     })
 
 def ticket_create(request):

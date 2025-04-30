@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ticketingsystem',
         'USER': 'tsprayberry',
-        'PASSWORD': 'TDS1998!!',
+        'PASSWORD': 'TDSNEW1998!!',
         'HOST': '192.168.1.224',
         'PORT': '3306',
          'OPTIONS': {
@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 

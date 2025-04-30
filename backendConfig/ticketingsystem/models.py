@@ -42,12 +42,12 @@ class Ticket(models.Model):
     
     @property
     def status(self):
+        if self.ticclosetime:
+            return "Resolved"
         if not self.ticacceptdate:
-            return "open"
-        elif not self.ticclosetime:
-            return "in-progress"
+            return "Open"
         else:
-            return "resolved"
+            return "In-Progress"
 
 class Comment(models.Model):
     commentid = models.CharField(primary_key=True, max_length=2)
