@@ -58,6 +58,7 @@ def ticket_detail(request, ticid):
     })
 
 def ticket_create(request):
+    print("ticket_create view called")  # Debug statement
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
@@ -76,4 +77,4 @@ def ticket_create(request):
     else:
         form = TicketForm()
     
-    return render(request, 'tickets/ticket_form.html', {'form': form})
+    return render(request, 'tickets/ticket_create.html', {'form': form})

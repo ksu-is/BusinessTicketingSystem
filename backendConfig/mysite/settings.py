@@ -78,8 +78,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ticketingsystem',
         'USER': 'tsprayberry',
-       #Commented out for security 'PASSWORD': '',
-       #Commented out for security 'HOST': '',
+        'PASSWORD': 'TDS1998!!',
+        'HOST': '192.168.1.224',
         'PORT': '3306',
          'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

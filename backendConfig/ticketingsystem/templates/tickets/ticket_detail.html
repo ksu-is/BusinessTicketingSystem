@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .ticket-details, .comments-section, .metrics-section {
+            margin-bottom: 20px;
+        }
+        .ticket-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ticket-details th, .ticket-details td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comments-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .comments-section li {
+            background: #f1f1f1;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ticket Details</h1>
+        <div class="ticket-details">
+            <h2>Ticket Information</h2>
+            <table>
+                <tr>
+                    <th>Ticket ID:</th>
+                    <td>{{ ticket.ticid }}</td>
+                </tr>
+                <tr>
+                    <th>Subject:</th>
+                    <td>{{ ticket.ticname }}</td>
+                </tr>
+                <tr>
+                    <th>Employee:</th>
+                    <td>{{ ticket.employid.employname }}</td>
+                </tr>
+                <tr>
+                    <th>Department:</th>
+                    <td>{{ ticket.deptname }}</td>
+                </tr>
+                <tr>
+                    <th>Branch:</th>
+                    <td>{{ ticket.employid.brnumb.brname }}</td>
+                </tr>
+                <tr>
+                    <th>Date Created:</th>
+                    <td>{{ ticket.ticcreatedate }}</td>
+                </tr>
+                <tr>
+                    <th>Priority:</th>
+                    <td>{{ ticket.ticpriority }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td>{{ ticket.status }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="comments-section">
+            <h2>Comments</h2>
+            {% if comments %}
+                <ul>
+                    {% for comment in comments %}
+                        <li>
+                            <strong>{{ comment.employid.employname }}:</strong> {{ comment.comments }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No comments available for this ticket.</p>
+            {% endif %}
+        </div>
+
+        <div class="metrics-section">
+            <h2>Metrics</h2>
+            {% if metrics %}
+                <p><strong>Resolution Time:</strong> {{ metrics.resolutiontime }}</p>
+                <p><strong>Satisfaction:</strong> {{ metrics.satisfaction }}</p>
+            {% else %}
+                <p>No metrics available for this ticket.</p>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'ticket_list' %}">Back to Ticket List</a>
+    </div>
+</body>
+</html>

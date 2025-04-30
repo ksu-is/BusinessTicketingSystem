@@ -199,8 +199,17 @@
             <tbody>
                 {% for ticket in tickets %}
                 <tr class="ticket-row">
-                    <td>{{ ticket.ticid }}</td>
-                    <td>{{ ticket.ticname }}</td>
+                    <tr>
+                        <td>
+                            <a href="{% url 'ticket_detail' ticid=ticket.ticid %}">
+                                {{ ticket.ticid }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'ticket_detail' ticid=ticket.ticid %}">
+                                {{ ticket.ticname }}
+                            </a>
+                        </td>
                     <td>{{ ticket.employid.employname }}</td>
                     <td>{{ ticket.employid.deptname }}</td>
                     <td>{{ ticket.employid.brnumb.brname }}</td>
