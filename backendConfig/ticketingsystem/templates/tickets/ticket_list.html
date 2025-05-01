@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 2000px;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 8px;
@@ -163,6 +163,14 @@
 <body>
     <div class="container">
         <header class="app-header">
+            <div class="logout-button" style="text-align: right; margin-bottom: 20px;">
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" style="background-color: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                        Logout
+                    </button>
+                </form>
+            </div>
             <h1>Tristen Sprayberry's Ticketing System</h1>
             <p>Manage and track support requests</p>
         </header>
@@ -182,7 +190,7 @@
             </form>
             <a href="{% url 'ticket_create' %}"><button>Create New Ticket</button></a>
         </div>
-        
+
         <table class="ticket-list">
             <thead>
                 <tr>

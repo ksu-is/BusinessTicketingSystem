@@ -11,7 +11,7 @@
             background-color: #f9f9f9;
         }
         .container {
-            max-width: 800px;
+            max-width: 1600px;
             margin: 0 auto;
             background: #fff;
             padding: 20px;
@@ -19,6 +19,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         h1 {
+            text-align: center;
             color: #333;
         }
         .ticket-details, .comments-section, .metrics-section {
@@ -29,7 +30,7 @@
             border-collapse: collapse;
         }
         .ticket-details th, .ticket-details td {
-            text-align: left;
+            text-align: center;
             padding: 8px;
             border-bottom: 1px solid #ddd;
         }
@@ -65,7 +66,7 @@
                 </tr>
                 <tr>
                     <th>Department:</th>
-                    <td>{{ ticket.deptname }}</td>
+                    <td>{{ ticket.employid.deptname }}</td>
                 </tr>
                 <tr>
                     <th>Branch:</th>
@@ -83,9 +84,19 @@
                     <th>Status:</th>
                     <td>{{ ticket.status }}</td>
                 </tr>
+                <tr>
+                    <th>Agent:</th>
+                    <td>
+                        {% if ticket.agentid %}
+                            {{ ticket.agentid.employname }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </td>
+                </tr>
             </table>
         </div>
-        
+
         <div class="ticket-actions">
             {% if ticket.status == "Open" %}
             <form method="post">
@@ -96,9 +107,16 @@
                 </button>
             </form>
             {% endif %}
-        
+            
             {% if ticket.status == "In-Progress" %}
-            <form method="post">
+            <form method="post" style="display: flex; align-items: center; gap: 10px;">
+                {% csrf_token %}
+                {{ accept_form.agentid }}
+                <button type="submit" name="accept_ticket" style="background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                    Change Agent
+                </button>
+            </form>
+            <form method="post" style="margin-top: 20px;">
                 {% csrf_token %}
                 {{ close_form.as_p }}
                 <button type="submit" name="close_ticket" style="background-color: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">

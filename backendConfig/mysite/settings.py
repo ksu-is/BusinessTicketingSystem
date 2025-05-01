@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SESSION_COOKIE_SECURE = True  # Set to True if using HTTPS
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Optional: End session when the browser is closed
+SESSION_ENGINE = 'django.contrib.sessions.backends.db' 
 
 # Application definition
 AUTHENTICATION_BACKENDS = [
@@ -87,8 +90,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ticketingsystem',
         'USER': 'tsprayberry',
-        'PASSWORD': 'TDSNEW1998!!',
-        'HOST': '192.168.1.224',
+       # 'PASSWORD':'',
+      #  'HOST': '',
         'PORT': '3306',
          'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

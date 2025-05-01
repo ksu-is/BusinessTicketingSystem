@@ -27,9 +27,14 @@ class CloseTicketForm(forms.ModelForm):
         fields = []  # No fields needed, just closing the ticket
 
 class AcceptTicketForm(forms.ModelForm):
+    agentid = forms.ModelChoiceField(
+    queryset=Employee.objects.all(),
+    widget=forms.Select(attrs={'class': 'form-control'}),
+    label="Assign Agent"
+    )
     class Meta:
         model = Ticket
-        fields = []  # No fields needed, just accepting the ticket
+        fields = ['agentid']
 
     def save(self, commit=True):
         ticket = super().save(commit=False)

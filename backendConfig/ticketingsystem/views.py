@@ -49,7 +49,7 @@ def ticket_list(request):
 
 @login_required
 def ticket_detail(request, ticid):
-    ticket = get_object_or_404(Ticket, ticid=ticid)
+    ticket = get_object_or_404(Ticket.objects.select_related('employid'), ticid=ticid)
     comments = Comment.objects.filter(ticid=ticket)
 
     metrics = None
@@ -60,10 +60,14 @@ def ticket_detail(request, ticid):
             metrics = None
 
     if request.method == 'POST':
-        if 'accept_ticket' in request.POST:  # Handle ticket acceptance
+     ticket = get_object_or_404(Ticket, ticid=ticid)
+    comments = Comment.objects.filter(ticid=ticket)
+
+    if request.method == 'POST':
+        if 'accept_ticket' in request.POST:  # Handle ticket acceptance or agent assignment
             accept_form = AcceptTicketForm(request.POST, instance=ticket)
             if accept_form.is_valid():
-                accept_form.save()
+                accept_form.save()  # Save the selected agentid
                 return redirect('ticket_detail', ticid=ticket.ticid)
         elif 'close_ticket' in request.POST:  # Handle ticket closure
             close_form = CloseTicketForm(request.POST, instance=ticket)
@@ -73,7 +77,7 @@ def ticket_detail(request, ticid):
                     ticclosetime=close_time,
                     ticid=ticket,
                     agentid=ticket.agentid,
-                    satisfaction='N',
+                    satisfaction='N/A',
                 )
                 ticket.ticclosetime = close_time
                 ticket.save()
@@ -120,7 +124,6 @@ def ticket_create(request):
     
     return render(request, 'tickets/ticket_create.html', {'form': form})
 
-@method_decorator(login_required, name='dispatch')
 class CustomLoginView(LoginView):
     template_name = 'tickets/login.html'
     authentication_form = EmailLoginForm

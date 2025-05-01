@@ -34,10 +34,10 @@
 ## Sprint Week 3
 
 ### Tasks
-- [] Finish webserver to host frontend of ticketing system
-- [] Figure out how to load scraped emails into database where needed
+- [x] Finish webserver to host frontend of ticketing system
+- [] Figure out how to load scraped emails into database where needed (REMOVED THIS FUNCTIONALITY)
 - [x] Ensure connection to database through python
-- [] Finalize and polish all changes
+- [x] Finalize and polish all changes
 
 ### Week 3 Bugs
-- 
+- Bugs: Too many to count
