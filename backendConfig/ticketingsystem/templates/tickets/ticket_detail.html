@@ -85,19 +85,28 @@
                 </tr>
             </table>
         </div>
-
-        {% if ticket.status == "open" %}
-        <div class="close-ticket">
-            <h2>Close Ticket</h2>
+        
+        <div class="ticket-actions">
+            {% if ticket.status == "Open" %}
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" style="background-color: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                {{ accept_form.as_p }}
+                <button type="submit" name="accept_ticket" style="background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                    Accept Ticket
+                </button>
+            </form>
+            {% endif %}
+        
+            {% if ticket.status == "In-Progress" %}
+            <form method="post">
+                {% csrf_token %}
+                {{ close_form.as_p }}
+                <button type="submit" name="close_ticket" style="background-color: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
                     Close Ticket
                 </button>
             </form>
+            {% endif %}
         </div>
-        {% endif %}
 
         <div class="comments-section">
             <h2>Comments</h2>

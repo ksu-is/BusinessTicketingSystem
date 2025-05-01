@@ -5,7 +5,7 @@ from .models import Ticket, Employee, Branch, Comment, Ticketmetrics
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.timezone import now
-from .forms import TicketForm, CloseTicketForm
+from .forms import TicketForm, CloseTicketForm, AcceptTicketForm
 
 # Create your views here.
 
@@ -54,34 +54,35 @@ def ticket_detail(request, ticid):
         except Ticketmetrics.DoesNotExist:
             metrics = None
 
-    # Check if the ticket is being closed
     if request.method == 'POST':
-        form = CloseTicketForm(request.POST, instance=ticket)
-        if form.is_valid():
-            # Generate the close time
-            close_time = now()
-
-            # Create a Ticketmetrics entry with the concatenated primary keys
-            Ticketmetrics.objects.create(
-                ticclosetime=close_time,  # Use the generated close time
-                ticid=ticket,  # Use the ticket's ID
-                agentid=ticket.agentid,  # Assign the agent handling the ticket
-                satisfaction='N',  # Default satisfaction value
-            )
-
-            # Update the close time for the ticket
-            ticket.ticclosetime = close_time
-            ticket.save()
-
-            return redirect('ticket_detail', ticid=ticket.ticid)
+        if 'accept_ticket' in request.POST:  # Handle ticket acceptance
+            accept_form = AcceptTicketForm(request.POST, instance=ticket)
+            if accept_form.is_valid():
+                accept_form.save()
+                return redirect('ticket_detail', ticid=ticket.ticid)
+        elif 'close_ticket' in request.POST:  # Handle ticket closure
+            close_form = CloseTicketForm(request.POST, instance=ticket)
+            if close_form.is_valid():
+                close_time = now()
+                Ticketmetrics.objects.create(
+                    ticclosetime=close_time,
+                    ticid=ticket,
+                    agentid=ticket.agentid,
+                    satisfaction='N',
+                )
+                ticket.ticclosetime = close_time
+                ticket.save()
+                return redirect('ticket_detail', ticid=ticket.ticid)
     else:
-        form = CloseTicketForm(instance=ticket)
+        accept_form = AcceptTicketForm(instance=ticket)
+        close_form = CloseTicketForm(instance=ticket)
 
     return render(request, 'tickets/ticket_detail.html', {
         'ticket': ticket,
         'comments': comments,
         'metrics': metrics,
-        'form': form,
+        'accept_form': accept_form,
+        'close_form': close_form,
     })
 
 def ticket_create(request):
