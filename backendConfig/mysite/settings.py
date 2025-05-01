@@ -29,6 +29,15 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
+]
+
+# Optional: Redirect users after login/logout
+LOGIN_URL = '/login/'  # URL to redirect to for login
+LOGIN_REDIRECT_URL = '/tickets'  # Redirect to the home page after login
+LOGOUT_REDIRECT_URL = '/login/'  # Redirect to the home page after logout
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

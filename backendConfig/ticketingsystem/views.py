@@ -5,15 +5,19 @@ from .models import Ticket, Employee, Branch, Comment, Ticketmetrics
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.timezone import now
-from .forms import TicketForm, CloseTicketForm, AcceptTicketForm
-
+from django.contrib.auth.views import LoginView
+from .forms import TicketForm, CloseTicketForm, AcceptTicketForm, EmailLoginForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 # Create your views here.
 
+@login_required
 def home(request):
     return render(request, "home.html")
 
 # views.py
 
+@login_required
 def ticket_list(request):
     tickets_list = Ticket.objects.all().order_by('-ticcreatedate')
     
@@ -29,11 +33,11 @@ def ticket_list(request):
     
     # Filter by status
     status_filter = request.GET.get('status')
-    if status_filter == 'open':
+    if status_filter == 'Open':
         tickets_list = tickets_list.filter(ticacceptdate__isnull=True)
-    elif status_filter == 'in-progress':
+    elif status_filter == 'In-Progress':
         tickets_list = tickets_list.filter(ticacceptdate__isnull=False, ticclosetime__isnull=True)
-    elif status_filter == 'resolved':
+    elif status_filter == 'Resolved':
         tickets_list = tickets_list.filter(ticclosetime__isnull=False)
     
     # Pagination
@@ -43,6 +47,7 @@ def ticket_list(request):
     
     return render(request, 'tickets/ticket_list.html', {'tickets': tickets})
 
+@login_required
 def ticket_detail(request, ticid):
     ticket = get_object_or_404(Ticket, ticid=ticid)
     comments = Comment.objects.filter(ticid=ticket)
@@ -85,13 +90,12 @@ def ticket_detail(request, ticid):
         'close_form': close_form,
     })
 
+@login_required
 def ticket_create(request):
-    print("ticket_create view called")  # Debug statement
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
-            # Generate a new ticket ID (you might want to customize this)
             last_ticket = Ticket.objects.order_by('-ticid').first()
             if last_ticket:
                 new_id = str(int(last_ticket.ticid) + 1).zfill(7)
@@ -101,8 +105,22 @@ def ticket_create(request):
             ticket.ticid = new_id
             ticket.ticcreatedate = timezone.now()
             ticket.save()
+
+            comment_text = form.cleaned_data.get('comment')
+            if comment_text:
+                Comment.objects.create(
+                    commentid='01',  # You can implement logic to generate unique comment IDs
+                    ticid=ticket,
+                    employid=ticket.employid,
+                    comments=comment_text
+                )
             return redirect('ticket_detail', ticid=ticket.ticid)
     else:
         form = TicketForm()
     
     return render(request, 'tickets/ticket_create.html', {'form': form})
+
+@method_decorator(login_required, name='dispatch')
+class CustomLoginView(LoginView):
+    template_name = 'tickets/login.html'
+    authentication_form = EmailLoginForm

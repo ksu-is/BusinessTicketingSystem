@@ -2,8 +2,16 @@
 from django import forms
 from .models import Ticket, Employee
 from django.utils.timezone import now
+from django.contrib.auth.forms import AuthenticationForm
 
 class TicketForm(forms.ModelForm):
+
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Enter additional details about the ticket...'}),
+        required=False,
+        label="Comment"
+    )
+
     class Meta:
         model = Ticket
         fields = ['ticname', 'ticpriority', 'employid']
@@ -29,3 +37,9 @@ class AcceptTicketForm(forms.ModelForm):
         if commit:
             ticket.save()
         return ticket
+    
+class EmailLoginForm(AuthenticationForm):
+    username = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Enter your email', 'class': 'form-control'}),
+        label="Email"
+    )

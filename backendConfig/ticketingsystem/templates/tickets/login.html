@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Ticket</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@
             background-color: #f9f9f9;
         }
         .container {
-            max-width: 600px;
+            max-width: 400px;
             margin: 0 auto;
             background: #fff;
             padding: 20px;
@@ -29,6 +29,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
         }
         button:hover {
             background-color: #2980b9;
@@ -37,11 +38,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Create a New Ticket</h1>
+        <h1>Login</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Submit</button>
+            <button type="submit">Login</button>
         </form>
     </div>
 </body>
